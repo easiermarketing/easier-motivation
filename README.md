@@ -35,3 +35,5 @@ Every sentence should make sense to a stranger with no context. If it needs deco
 ## Deploy
 
 Cloudflare Pages, connected to this repo. Push to `main` and it's live in about a minute. No build step.
+
+<!-- auto-deploy check 2026-09-04T21:53:38.055Z -->
