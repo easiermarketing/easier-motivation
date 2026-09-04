@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>easier motivation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@400;500;600;700&family=Azeret+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --c-purple:#6E46FF; --c-yellow:#FFC74C; --c-green:#46FF88; --c-blue:#0694FF; --c-red:#FA2D7F;
+  --c-purple-lightest:#E6DFFF; --c-purple-light:#8C71FF; --c-purple-dark:#2B1E32;
+  --c-yellow-lightest:#FFFCDE; --c-green-lightest:#E4FCDE; --c-green-darker:#085B3C; --c-pink:#C208FF;
+  --c-grey:#D1D1D1; --c-grey-dark:#313131; --c-grey-lightest:#FAFAFC;
+  --fg:#121417; --fg-muted:#313131;
+  --bg-page:#fff; --bg-soft:#F5F5F7; --border-soft:#D1D1D1;
+  --gradient-aurora:
+    radial-gradient(60% 80% at 20% 30%, #FA2D7F33 0%, transparent 60%),
+    radial-gradient(70% 80% at 80% 70%, #6E46FFAA 0%, transparent 65%),
+    linear-gradient(135deg, #A68EFF 0%, #6E46FF 60%, #2B1E32 100%);
+  --font-display:'Poppins',system-ui,-apple-system,sans-serif;
+  --font-hand:'Caveat','Bradley Hand',cursive;
+  --font-mono:'Azeret Mono',ui-monospace,Menlo,monospace;
+  --sp-3xs:8px; --sp-2xs:12px; --sp-xs:16px; --sp-s:20px; --sp-m:28px; --sp-l:40px; --sp-xl:56px;
+  --radius-l:24px; --radius-pill:9999px;
+  --ease-out:cubic-bezier(0.22,1,0.36,1); --dur-fast:140ms; --dur-base:220ms;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:var(--font-display);font-size:17px;line-height:1.5;color:var(--fg);background:var(--bg-page);-webkit-font-smoothing:antialiased}
+.wrap{max-width:600px;margin:0 auto;padding:0 var(--sp-s) var(--sp-xl)}
+
+header{background:var(--gradient-aurora);color:#fff;padding:calc(var(--sp-s) + env(safe-area-inset-top)) var(--sp-s) var(--sp-s)}
+header .inner{max-width:600px;margin:0 auto}
+.wide{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.22em;color:#E6DFFF;margin:0 0 6px}
+header h1{font-size:30px;font-weight:700;text-transform:uppercase;letter-spacing:-.01em;line-height:1.02;margin:0}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.04em;border-radius:var(--radius-pill);border:1px solid transparent;cursor:pointer;white-space:nowrap;font-size:13px;padding:8px 16px;transition:background-color var(--dur-base) var(--ease-out),border-color var(--dur-base) var(--ease-out),transform var(--dur-fast) var(--ease-out)}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn--purple{background:var(--c-purple);color:#fff}
+.btn--purple:hover{background:var(--c-purple-light)}
+.btn--ghost{background:#fff;border-color:var(--c-grey-dark);color:var(--c-grey-dark)}
+.btn--ghost:hover{border-color:var(--c-grey)}
+.btn--light{background:var(--c-purple-lightest);border-color:var(--c-purple);color:var(--c-purple)}
+.btn--big{font-size:15px;padding:13px 26px}
+
+.q{font-size:22px;font-weight:700;line-height:1.15;margin:var(--sp-m) 0 var(--sp-xs)}
+.states{display:flex;flex-direction:column;gap:10px}
+.state-btn{width:100%;text-align:left;background:#fff;border:1px solid var(--border-soft);border-radius:var(--radius-l);padding:15px 18px;cursor:pointer;font-family:var(--font-display);font-size:16px;font-weight:500;color:var(--fg);line-height:1.3;display:flex;align-items:center;gap:13px;transition:border-color var(--dur-base) var(--ease-out),background var(--dur-base) var(--ease-out),transform var(--dur-fast) var(--ease-out)}
+.state-btn:hover{border-color:var(--c-purple);background:var(--c-grey-lightest)}
+.state-btn:active{transform:translateY(1px) scale(.995)}
+.dot{width:10px;height:10px;border-radius:var(--radius-pill);flex:0 0 10px}
+
+.draw-strip{background:var(--gradient-aurora);border-radius:var(--radius-l);padding:var(--sp-s);text-align:center;margin:var(--sp-m) 0 0;color:#fff}
+.draw-strip p{margin:0 0 12px;font-size:16px;font-weight:500;color:#E6DFFF}
+.btn--onstrip{background:#fff;color:var(--c-purple)}
+
+.panel{display:none}
+.panel.on{display:block;animation:fade var(--dur-base) var(--ease-out)}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.back{display:inline-flex;align-items:center;gap:6px;margin:var(--sp-s) 0 var(--sp-xs);background:none;border:none;padding:0;cursor:pointer;font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--c-purple)}
+h2.title{font-size:25px;font-weight:700;line-height:1.1;letter-spacing:-.01em;margin:0 0 var(--sp-xs)}
+.lede{font-size:17px;line-height:1.5;margin:0 0 var(--sp-xs)}
+
+.card{border-radius:var(--radius-l);padding:16px 18px;margin:0 0 12px;background:#fff;border:1px solid var(--border-soft)}
+.card--soft{background:var(--bg-soft);border-color:transparent}
+.card--do{background:var(--c-purple-lightest);border-color:transparent}
+.card--warm{background:var(--c-yellow-lightest);border-color:transparent}
+.card--good{background:var(--c-green-lightest);border-color:transparent}
+.card p{margin:0 0 8px;font-size:16px;line-height:1.45}
+.card p:last-child{margin-bottom:0}
+.label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--c-purple);margin:0 0 8px}
+.card--warm .label{color:#FF701B}
+.card--good .label{color:var(--c-green-darker)}
+
+ul.tight,ol.tight{margin:0;padding-left:19px}
+ul.tight li,ol.tight li{margin:0 0 7px;font-size:16px;line-height:1.4}
+ul.tight li:last-child,ol.tight li:last-child{margin-bottom:0}
+
+.row{display:flex;gap:12px;align-items:baseline;padding:11px 0;border-top:1px solid var(--border-soft);font-size:16px;line-height:1.4}
+.row:first-of-type{border-top:none}
+.row b{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;flex:0 0 92px;color:var(--c-purple)}
+.row.dim b{color:var(--fg-muted)}
+
+.corr{padding:12px 0;border-top:1px solid var(--border-soft)}
+.corr:first-of-type{border-top:none}
+.corr .charge{font-family:var(--font-hand);font-size:23px;line-height:1.1;color:var(--fg-muted);margin:0 0 3px}
+.corr p{margin:0;font-size:16px;line-height:1.45}
+
+.ask{padding:13px 0;border-top:1px solid var(--border-soft);font-size:17px;line-height:1.4;font-weight:500}
+.ask:first-of-type{border-top:none}
+
+.deck-card{background:var(--gradient-aurora);color:#fff;border-radius:var(--radius-l);padding:var(--sp-l) var(--sp-m);min-height:180px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:24px;font-weight:600;line-height:1.25;transition:opacity 220ms var(--ease-out)}
+.deck-actions{display:flex;gap:10px;margin-top:12px}
+
+.num{font-family:var(--font-mono);font-feature-settings:"tnum" 1}
+.hand{font-family:var(--font-hand);font-size:22px;line-height:1.2;color:var(--c-purple)}
+nav.more{display:flex;flex-wrap:wrap;gap:9px;margin-top:var(--sp-m)}
+footer{margin-top:var(--sp-l);padding-top:var(--sp-xs);border-top:1px solid var(--border-soft);font-size:13px;color:var(--fg-muted);line-height:1.45}
+
+@media(max-width:400px){header h1{font-size:26px}h2.title{font-size:22px}.deck-card{font-size:21px}.row b{flex:0 0 80px}}
+</style>
+</head>
+<body>
+
+<header><div class="inner">
+  <p class="wide">easier</p>
+  <h1 id="hdr">Motivation</h1>
+</div></header>
+
+<div class="wrap">
+
+<section class="panel on" id="p-home">
+  <p class="q">What's happening?</p>
+  <div class="states">
+    <button class="state-btn" data-go="boring"><span class="dot" style="background:var(--c-purple)"></span>Something boring. Nobody's watching.</button>
+    <button class="state-btn" data-go="exposing"><span class="dot" style="background:var(--c-red)"></span>Something exposing. DM, rate, upsell, event.</button>
+    <button class="state-btn" data-go="missed"><span class="dot" style="background:#FF701B"></span>I'm late and hoping it slides.</button>
+    <button class="state-btn" data-go="call"><span class="dot" style="background:var(--c-blue)"></span>A call today is eating my day.</button>
+    <button class="state-btn" data-go="late"><span class="dot" style="background:var(--c-purple-dark)"></span>It's late. I'm on the sofa. Can't move.</button>
+    <button class="state-btn" data-go="good"><span class="dot" style="background:var(--c-green)"></span>Starting something good. Set it up.</button>
+  </div>
+
+  <div class="draw-strip">
+    <p>Too fried to pick one?</p>
+    <button class="btn btn--onstrip btn--big" data-go="deck">Draw a card</button>
+  </div>
+
+  <nav class="more">
+    <button class="btn btn--ghost" data-go="fuel">Fuel</button>
+    <button class="btn btn--ghost" data-go="corrections">Corrections</button>
+    <button class="btn btn--ghost" data-go="evidence">Evidence</button>
+    <button class="btn btn--ghost" data-go="conditions">Conditions</button>
+    <button class="btn btn--ghost" data-go="about">About</button>
+  </nav>
+  <footer>Deep links: <span class="num">#boring #exposing #missed #call #late #good #deck #fuel</span></footer>
+</section>
+
+<section class="panel" id="p-boring">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">Boring, nobody watching</h2>
+  <p class="lede">No interest, no novelty, no urgency, nobody expecting it. Four fuels missing. Willpower doesn't beat that, and it never has.</p>
+  <div class="card card--do">
+    <p class="label">Pick one, now</p>
+    <ul class="tight">
+      <li>Tell someone a specific time today.</li>
+      <li>Book a short call to report done or not done.</li>
+      <li>Work next to someone, in person or on a call.</li>
+      <li>Delegate it. The stall is the tell.</li>
+      <li>Attach money or a visible consequence.</li>
+    </ul>
+  </div>
+  <div class="card card--soft"><p>Every fix that has ever worked for you was external. Every internal one failed. That's an instruction, not a flaw.</p></div>
+  <nav class="more"><button class="btn btn--light" data-go="fuel">Fuel</button><button class="btn btn--ghost" data-go="deck">Card</button></nav>
+</section>
+
+<section class="panel" id="p-exposing">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">Exposing</h2>
+  <p class="lede">Risk is fine when it's low or repairable. The thing you avoid is being resented by someone you can't argue back to. Narrower than fear of rejection, and much older.</p>
+  <div class="card card--do">
+    <p class="label">Do this now</p>
+    <p>Send three. One sitting, no gaps to reconsider. Score yourself on sent, not on replies.</p>
+  </div>
+  <div class="card">
+    <p class="label">The ladder, easiest first</p>
+    <ol class="tight">
+      <li>Warm messages to lapsed clients</li>
+      <li>Upsell someone you already work with</li>
+      <li>Cold outreach</li>
+      <li>Raise a rate</li>
+      <li>Events</li>
+    </ol>
+  </div>
+  <div class="card card--warm"><p>You won't promise a fantasy result because you know what you can deliver. That's the credibility. Claim more, don't bluff more.</p></div>
+</section>
+
+<section class="panel" id="p-missed">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">Late, hoping it slides</h2>
+  <p class="lede">Going undetected feels safer than doing well. It's an old habit and it's why finishing early never happens.</p>
+  <div class="card card--do">
+    <p class="label">Do this now, in this order</p>
+    <ol class="tight">
+      <li>Send the new time. Before you start. No apology paragraph.</li>
+      <li>Then start. Badly is fine.</li>
+    </ol>
+  </div>
+  <div class="card card--soft"><p>Being chased costs more than being late.</p></div>
+  <div class="card card--warm">
+    <p class="label">If you're auditing the guilt</p>
+    <p>Say it as an action, not a character. "I'm a day late on X." Then ask what you'd think of a supplier you like who did the same. That answer is the fair one, and it applies to you too.</p>
+  </div>
+</section>
+
+<section class="panel" id="p-call">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">A call is eating today</h2>
+  <p class="lede">The call is an hour. The dread before and the relief after take the rest. That's the real cost, and the tasks aren't causing it.</p>
+  <div class="card card--do">
+    <p class="label">Do this now</p>
+    <ol class="tight">
+      <li>Write the three things you need from it. Thirty seconds.</li>
+      <li>Put the boring task in the slot right before the call.</li>
+    </ol>
+  </div>
+  <div class="card card--good"><p>The window before a call is your best focus of the day, because the urgency is already in the room. Stop spending it on rehearsal.</p></div>
+</section>
+
+<section class="panel" id="p-late">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">Too late, can't move</h2>
+  <p class="lede">You don't get sleepy in front of the TV. You get sleepy after you stand up. It's a physical sequence, not a decision, which is why alarms have never worked.</p>
+  <div class="card card--do"><p class="label">Do this now</p><p>Stand up and walk to the bathroom. Not "go to bed". The tiredness turns up about forty seconds later.</p></div>
+  <div class="card card--soft"><p class="label">Fix it when you're not tired</p><p>Plug timer on the TV, or set the sleep timer at dinner rather than at midnight.</p></div>
+</section>
+
+<section class="panel" id="p-good">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">Set it up</h2>
+  <div class="card card--do">
+    <p class="label">Three checks</p>
+    <ul class="tight">
+      <li>Music, not video.</li>
+      <li>One thing that makes it new, or one visible unlock.</li>
+      <li>Someone to show it to at the end.</li>
+    </ul>
+  </div>
+  <div class="card card--good"><p>When you build something you like, you work for months, you're proud of it, and you show it off. Interest, novelty, progression, recognition, no threat. That engine exists and it's the one to copy.</p></div>
+  <p class="hand">Nobody left to annoy. You can be the loud one at work now.</p>
+</section>
+
+<section class="panel" id="p-fuel">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">Fuel</h2>
+  <p class="lede">Name the task. Which of these is present? If none, that's your answer.</p>
+  <div class="row"><b>Interest</b><span>Covers a minority of your work and always will. Don't wait for it.</span></div>
+  <div class="row"><b>Novelty</b><span>Decays by design. When a system goes flat, swap it. That's decay, not failure.</span></div>
+  <div class="row"><b>Progression</b><span>Failure states repel you. Unlocks hold you for hours. Break it into levels.</span></div>
+  <div class="row"><b>Urgency</b><span>Your default. Works every time, costs you the week. Use it early and on purpose.</span></div>
+  <div class="row"><b>People</b><span>Strongest and most underused. A face to report to, a booked call, money attached.</span></div>
+  <div class="row dim"><b>Chemistry</b><span>Coffee and meds work and make you tense. Tool, not default.</span></div>
+  <div class="card card--warm" style="margin-top:var(--sp-xs)"><p>Most people around you are kind and won't push, so they don't hold you to anything. If you want that fuel, you have to build the consequence in.</p></div>
+</section>
+
+<section class="panel" id="p-corrections">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">Corrections</h2>
+  <p class="lede">Old charges on the left. What's actually going on, on the right.</p>
+  <div class="corr"><p class="charge">"Lazy"</p><p>Your attention has always allocated itself this way. It was there before you had any work and it survived punishment, so punishment was never the lever.</p></div>
+  <div class="corr"><p class="charge">"Selfish"</p><p>You default to shouldering things. Selfishness is something you had to add deliberately, in adulthood, because you had too little of it.</p></div>
+  <div class="corr"><p class="charge">"Get a job"</p><p>You built a life with no authority figure standing over you. That was the point when you were young and it's still the point.</p></div>
+  <div class="corr"><p class="charge">"Not a natural salesman"</p><p>Mostly irrelevant. Knowing what you can honestly deliver is what makes a technical person believable. The gap is under-claiming, not under-bluffing.</p></div>
+  <div class="corr"><p class="charge">"My behaviour lags my thinking"</p><p>Self-blame widens that gap. Treating a miss as wiring rather than character predicts better follow-through.</p></div>
+  <div class="corr"><p class="charge">"I should manage without a trigger"</p><p>You almost never have. Design around it instead of arguing with it.</p></div>
+</section>
+
+<section class="panel" id="p-evidence">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">Evidence</h2>
+  <p class="lede">Not a list to read. Six questions to answer, out loud, about right now.</p>
+  <div class="ask">What did you finish recently that you'd happily show someone?</div>
+  <div class="ask">What's working now that wasn't working a year ago?</div>
+  <div class="ask">Who has said something good to you lately, and what were the actual words?</div>
+  <div class="ask">Where has crunch produced work you're proud of?</div>
+  <div class="ask">What did you build for free, for fun, before anyone paid you?</div>
+  <div class="ask">What would someone who likes you say you're underrating?</div>
+  <div class="card card--warm" style="margin-top:var(--sp-s)"><p>This page will feel awkward. Self-criticism makes self-compassion feel worst exactly when it works best. Answer them anyway.</p></div>
+</section>
+
+<section class="panel" id="p-conditions">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">Conditions</h2>
+  <p class="lede">Your good day is almost entirely upstream. Slept, up early, exercised yesterday, protein, no emergencies, no calls. It's decided the night before.</p>
+  <div class="card card--soft">
+    <ul class="tight">
+      <li>Stand up before you're tired.</li>
+      <li>Yesterday's gym is today's good morning. It needs a slot, not a mood.</li>
+      <li>Protein in the morning, not just coffee.</li>
+      <li>Batch the calls.</li>
+      <li>Music during focus. Video after.</li>
+      <li>Delegate below your pay grade before it becomes a stall.</li>
+    </ul>
+  </div>
+  <div class="card card--warm"><p>No tracking, no streak, nothing to break. A second thing to ignore would just be more evidence against you.</p></div>
+</section>
+
+<section class="panel" id="p-deck">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">Draw one</h2>
+  <div class="deck-card" id="deck-face">Tap draw.</div>
+  <div class="deck-actions">
+    <button class="btn btn--purple btn--big" id="draw">Draw</button>
+    <button class="btn btn--ghost btn--big" data-go="home">Done</button>
+  </div>
+  <div class="card card--soft" style="margin-top:var(--sp-s)"><p>Trust the card even when the fit is unclear. Under pressure you fall back on the old solution, and a random prompt gets round that.</p></div>
+</section>
+
+<section class="panel" id="p-about">
+  <button class="back" data-go="home">← Back</button>
+  <h2 class="title">About</h2>
+  <p class="lede">Your task app answers what to do and when. This answers why you're not moving when the calendar is already right.</p>
+  <div class="card card--soft"><p>Your drive runs on threat. Most of what you chase is a move away from something rather than toward it. And you run beautifully on interest, in one category of work, with no threat in it at all. Both are true, and the second is the one to extend.</p></div>
+  <div class="card"><p class="label">When it stops working</p><p>It will. Add cards. Don't replace the tool and don't conclude anything about yourself.</p></div>
+  <div class="card"><p class="label">Left open</p><p>Anger, and never having felt entitled to it. Your father, and nothing ever said. Praise, which lands as surreal. And whether you want clients at all.</p></div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var titles={home:'Motivation',boring:'Boring',exposing:'Exposing',missed:'Late',call:'The call',late:'Too late',good:'Good work',fuel:'Fuel',corrections:'Corrections',evidence:'Evidence',conditions:'Conditions',deck:'The deck',about:'About'};
+  var panels=document.querySelectorAll('.panel'), hdr=document.getElementById('hdr');
+  function show(id){
+    if(!titles[id]) id='home';
+    panels.forEach(function(p){p.classList.remove('on');});
+    var el=document.getElementById('p-'+id); if(el) el.classList.add('on');
+    hdr.textContent=titles[id];
+    window.scrollTo(0,0);
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-go]'); if(!b) return;
+    var id=b.getAttribute('data-go');
+    location.hash=(id==='home')?'':id;
+    show(id);
+  });
+  window.addEventListener('hashchange',function(){show(location.hash.replace('#','')||'home');});
+
+  var cards=["Send it before it's ready.","Tell someone the time it'll be done. Now.","Who are you going to show this to?","Dull one first. Good one as the reward.","Boredom is a signal, not a verdict. Change the format.","Put yourself in a room with someone.","What would you say to a supplier who did this?","Halve it. Then halve it again.","You're not late. You're unstarted. Start badly.","Music, not video.","Stand up. The tiredness comes after.","What's the smallest version you could ship today?","Would you have found this funny at eleven?","Turn it into an unlock. What's level one?","Nobody is coming to make you. That's the design, not a fault.","You don't have to feel like it.","Say it in one sentence to someone who doesn't care.","Charge more and see if you still resent it.","Delegate it. The stall is the tell.","Set a deadline someone else can see.","You've done this before, under worse conditions.","Fifteen minutes. Then you're allowed to stop.","Ask for the thing.","Whose voice is that?","The dread costs more than the call.","Do it badly on purpose.","Open with the part you like.","Send three. One sitting. Don't count replies.","Take the piss a bit. It's allowed at work.","What would you do if it wouldn't be judged?","Change the room.","If this were a game, what's the next unlock?","You're allowed to want it.","Name the next physical movement.","Under the radar isn't the same as safe.","Book the call. The call is the fuel.","Being chased costs more than being late.","Rest without earning it first.","What's the version of this you'd enjoy?","Nobody will remember this in a month. Ship it.","Your best hour is before a call. Spend it on the boring thing.","You get to be the loud one now.","What did you build for free, for fun, before anyone paid you?","Stop checking how you feel. Check whether it's sent.","One thing. Then look up.","Interest isn't coming. Pick another fuel.","Write the three things you need. Thirty seconds.","Say the good number out loud.","Nobody's marking this."];
+  var last=-1, face=document.getElementById('deck-face'), btn=document.getElementById('draw');
+  if(btn){btn.addEventListener('click',function(){
+    var i=last; while(i===last&&cards.length>1){i=Math.floor(Math.random()*cards.length);} last=i;
+    face.style.opacity=0;
+    setTimeout(function(){face.textContent=cards[i];face.style.opacity=1;},120);
+  });}
+
+  show(location.hash.replace('#','')||'home');
+})();
+</script>
+</body>
+</html>
